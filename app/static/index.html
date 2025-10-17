@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finder Image</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div id="login-overlay" class="overlay visible">
+      <div class="dialog">
+        <h1>Finder Image</h1>
+        <p class="subtitle">Авторизация</p>
+        <form id="login-form">
+          <label>Логин</label>
+          <input type="text" id="username" value="admin" required />
+          <label>Пароль</label>
+          <input type="password" id="password" value="admin" required />
+          <button type="submit" class="primary">Войти</button>
+          <p class="hint">По умолчанию используется admin / admin</p>
+        </form>
+        <div class="error" id="login-error"></div>
+      </div>
+    </div>
+
+    <header>
+      <div class="logo">Finder Image</div>
+      <div class="actions">
+        <button id="open-import" class="ghost">Импорт из Excel</button>
+        <button id="open-batch" class="ghost">Пакетный поиск</button>
+        <button id="open-user" class="ghost">Профиль</button>
+        <button id="logout" class="ghost">Выход</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="window" id="products-window">
+        <div class="window-header">
+          <h2>Товары</h2>
+          <div class="window-actions">
+            <button class="ghost" data-size="small">−</button>
+            <button class="ghost" data-size="full">⬜</button>
+          </div>
+        </div>
+        <div class="window-body">
+          <form id="create-product" class="form-inline">
+            <input type="text" id="new-sku" placeholder="Артикул" required />
+            <input type="text" id="new-manufacturer" placeholder="Производитель" required />
+            <input type="text" id="new-title" placeholder="Название (опционально)" />
+            <select id="new-mode">
+              <option value="google">Google Custom Search</option>
+              <option value="openai">OpenAI Images</option>
+            </select>
+            <button type="submit" class="primary">Добавить</button>
+          </form>
+          <div class="table-wrapper">
+            <table id="products-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="select-all" /></th>
+                  <th>Название</th>
+                  <th>Артикул</th>
+                  <th>Производитель</th>
+                  <th>Режим</th>
+                  <th>Статус</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="window" id="details-window">
+        <div class="window-header">
+          <h2>Детали</h2>
+          <div class="window-actions">
+            <button class="ghost" data-size="small">−</button>
+            <button class="ghost" data-size="full">⬜</button>
+          </div>
+        </div>
+        <div class="window-body">
+          <div id="product-details" class="details-placeholder">
+            Выберите товар, чтобы увидеть изображения и логи
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="floating" id="import-window">
+      <div class="window-header">
+        <h2>Импорт из Excel</h2>
+        <button class="ghost" data-close>✕</button>
+      </div>
+      <form id="import-form">
+        <label>Выберите режим поиска</label>
+        <select id="import-mode">
+          <option value="google">Google Custom Search</option>
+          <option value="openai">OpenAI Images</option>
+        </select>
+        <label class="file-input">
+          <span id="file-label">Выберите файл Excel</span>
+          <input type="file" id="import-file" accept=".xlsx,.xls" required />
+        </label>
+        <button type="submit" class="primary">Импортировать</button>
+        <div class="error" id="import-error"></div>
+      </form>
+    </div>
+
+    <div class="floating" id="user-window">
+      <div class="window-header">
+        <h2>Профиль</h2>
+        <button class="ghost" data-close>✕</button>
+      </div>
+      <form id="credentials-form">
+        <label>Текущий пароль</label>
+        <input type="password" id="current-password" required />
+        <label>Новый логин</label>
+        <input type="text" id="new-username" required />
+        <label>Новый пароль</label>
+        <input type="password" id="new-password" required />
+        <button type="submit" class="primary">Сохранить</button>
+        <div class="success" id="credentials-success"></div>
+        <div class="error" id="credentials-error"></div>
+      </form>
+    </div>
+
+    <div class="floating" id="batch-window">
+      <div class="window-header">
+        <h2>Пакетный поиск</h2>
+        <button class="ghost" data-close>✕</button>
+      </div>
+      <form id="batch-form">
+        <p class="hint">Выбрано: <span id="batch-count">0</span> товаров</p>
+        <label>Режим поиска</label>
+        <select id="batch-mode">
+          <option value="google">Google Custom Search</option>
+          <option value="openai">OpenAI Images</option>
+        </select>
+        <label>Произвольный запрос (опционально)</label>
+        <input type="text" id="batch-query" placeholder="Введите собственный поисковый запрос" />
+        <button type="submit" class="primary">Запустить</button>
+        <div class="error" id="batch-error"></div>
+      </form>
+    </div>
+
+    <script src="/static/app.js" type="module"></script>
+  </body>
+</html>

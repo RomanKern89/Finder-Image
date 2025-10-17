@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: finder-image-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: Admin2025
+      POSTGRES_DB: finder_image
+    ports:
+      - "5452:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: finder-image-app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 7000 --reload
+    ports:
+      - "7000:7000"
+    environment:
+      APP_SECRET_KEY: change-me
+      DATABASE_URL: postgresql+psycopg2://root:Admin2025@db:5432/finder_image
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      GOOGLE_CSE_ID: ${GOOGLE_CSE_ID:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes:
+      - ./:/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
